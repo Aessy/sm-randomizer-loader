@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <fstream>
+#include <filesystem>
 
 #include <boost/algorithm/string.hpp>
 
@@ -146,7 +147,9 @@ static const char usage[] =
 R"(Randomizer Loader.
 
     Usage:
-      rl <rom> <preset> <port> [--complexity=<cm> | --seed=<sd> | --progression=<ps>]
+      rl <rom> <preset> <port> [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<file>]
+      rl <rom> <preset>        [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<file>]
+      rl <rom> <port>          [--load]
       rl (-h | --help)
       rl --version
 
@@ -155,6 +158,8 @@ R"(Randomizer Loader.
       -c --complexity=<cm>    Complexity [default: simple]
       -s --seed=<sd>          Seed [default: 0]
       -p --progression=<ps>   Progression Speed [default: slow]
+      -o --output=<file>      Output the patched ROM to this file.
+      -l --load               Indicate to only load a room
 )";
 
 template<typename T>
@@ -162,19 +167,38 @@ Options parse_opts(T const& opts)
 {
     Options options {
          opts.at("<rom>").asString()
-        ,opts.at("<preset>").asString()
+        ,""                                     // Optional preset
         ,opts.at("--complexity").asString()
         ,opts.at("--seed").asString()
         ,opts.at("--progression").asString()
     };
 
+    if (opts.at("<preset>").isString())
+    {
+        options.preset = opts.at("<preset>").asString();
+    }
+
+    std::cout << "Parsed opts\n";
+
     return options;
+}
+
+template<typename T>
+static auto create_port(T const& opts)
+{
+    if (opts.at("<port>").isString())
+    {
+        std::cout << "Found port\n";
+        return open_port(opts.at("<port>").asString());
+    }
+
+    return SerialPort(nullptr, sp_close);
 }
 
 int main(int argc, char * argv[]) try
 {
     auto const args
-        = docopt::docopt(usage
+        = docopt::docopt(usage,
                          { argv + 1, argv + argc },
                          true,                  // show help if requested
                          "Randomizer loader");  // version string
@@ -182,16 +206,37 @@ int main(int argc, char * argv[]) try
     auto const opts = parse_opts(args);
 
     std::cout << "Starting randomizer loader\n";
-    auto port = open_port(args.at("<port>").asString());
+    auto port = create_port(args);
 
     auto rom = getFileContent(opts.rom);
     std::cout << "Loaded ROM: " << rom.size() << "\n";
 
-    auto preset = fetchPreset(opts);
-    auto const filename = patchRom(rom, preset);
+    std::filesystem::path path(opts.rom);
 
-    std::cout << "Writing ROM to sd2snes: " << filename << "\n";
-    write_file(port.get(), filename, rom);
+    std::string filename = "";
+    if (opts.preset != "")
+    {
+        auto preset = fetchPreset(opts);
+        filename = patchRom(rom, preset);
+    }
+    else
+    {
+        filename = path.filename().string();
+    }
+
+    if (port)
+    {
+        std::cout << "Writing ROM to sd2snes: " << filename << "\n";
+        write_file(port.get(), filename, rom);
+    }
+
+    if (args.at("--output").isString())
+    {
+        auto const output_path = std::filesystem::path(args.at("--output").asString()) / filename;
+        std::ofstream file(output_path, std::ios::binary | std::ios::out);
+        std::copy(rom.begin(), rom.end(), std::ostream_iterator<char>(file));
+    }
+
     std::cout << "DONE!\n";
 } catch (std::exception const& e) {
     std::cerr << "Randomizer-loader stopped with an error: " << e.what() << '\n';

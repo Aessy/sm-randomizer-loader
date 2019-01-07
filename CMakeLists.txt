@@ -9,4 +9,4 @@ SET(SRC main.cpp
 
 add_executable(rl ${SRC})
 target_compile_options(rl PRIVATE -std=c++17 -g)
-target_link_libraries(rl serialport boost_system pthread docopt fmt restclient-cpp curl ssl crypto)
+target_link_libraries(rl serialport boost_system stdc++fs pthread docopt fmt restclient-cpp curl ssl crypto)
