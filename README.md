@@ -26,4 +26,6 @@ Randomizer Loader.
       
 # Example
 
+```
 ./rl ./super_metroid.smc super_hard_preset /dev/ttyACM0 --complexity=hard --progression=fast
+```
