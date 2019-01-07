@@ -37,13 +37,13 @@ Randomizer Loader.
 # Example
 
 ```
-# Create a randomizer from "super_hard_preset" with hard complexity and fast progression and 
+# Create a randomizer from "super_hard_preset" preset with hard complexity and fast progression and 
 # load it to the sd2snes over usb
 ./rl ./super_metroid.smc super_hard_preset /dev/ttyACM0 --complexity=hard --progression=fast
 ```
 
 ```
-# Create a randomizer from "super_hard_preset", load it to the sd2snes over usb and
+# Create a randomizer from "super_hard_preset" preset, load it to the sd2snes over usb and
 # put a copy in /home/samus
 ./rl ./super_metroid.smc super_hard_preset /dev/ttyACM0 -o /home/samus/
 ```
