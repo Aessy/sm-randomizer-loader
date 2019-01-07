@@ -12,6 +12,10 @@ To load over usb the sd2snes has to be loaded with usb2snes firmware.
 * boost
 * curl
 * cmake
+* stdc++fs
+
+# Build and install
+Build with cmake and make
 
 # Usage
 Randomizer Loader.
