@@ -20,8 +20,8 @@ Build with cmake and make
 Randomizer Loader.
 
     Usage:
-      rl <rom> <preset> <port> [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<file>]
-      rl <rom> <preset>        [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<file>]
+      rl <rom> <preset> <port> [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<folder>]
+      rl <rom> <preset>        [--complexity=<cm> --seed=<sd> --progression=<ps> --output=<folder>]
       rl <rom> <port>          [--load]
       rl (-h | --help)
       rl --version
@@ -31,8 +31,8 @@ Randomizer Loader.
       -c --complexity=<cm>    Complexity [default: simple]
       -s --seed=<sd>          Seed [default: 0]
       -p --progression=<ps>   Progression Speed [default: slow]
-      -o --output=<file>      Output the patched ROM to this file.
-      -l --load               Indicate to only load a room
+      -o --output=<folder>    Output the patched ROM to this folder.
+      -l --load               Only transfer <rom> to the sd2snes. 
       
 # Example
 
