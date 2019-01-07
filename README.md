@@ -1,8 +1,7 @@
 # sm-randomizer-loader
 Just a small CLI program that automatically creates super metroid randomizers from http://randommetroidsolver.pythonanywhere.com and loads them on your sd2snes over usb.
 
-Only tested on linux (arch and debian)
-To load over usb the sd2snes has to be loaded with usb2snes firmware.
+Only tested on linux (arch and debian). To load over usb the sd2snes has to run usb2snes firmware.
 
 # Dependencies
 * libserialport
