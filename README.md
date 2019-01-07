@@ -39,7 +39,7 @@ Randomizer Loader.
 ```
 # Create a randomizer from "super_hard_preset" preset with hard complexity and fast progression and 
 # load it to the sd2snes over usb
-./rl ./super_metroid.smc super_hard_preset /dev/ttyACM0 --complexity=hard --progression=fast
+./rl ./super_metroid.smc super_hard_preset /dev/ttyACM0 -c hard -p fast
 ```
 
 ```
